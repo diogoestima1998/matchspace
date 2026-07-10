@@ -3,6 +3,11 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type AuthResult = { success: true } | { success: false; error: string };
 
+type SignUpResult =
+  | { status: "complete" }
+  | { status: "confirm_email" }
+  | { status: "error"; error: string };
+
 function mapAuthError({ message }: { message: string }) {
   if (message.includes("Invalid login credentials")) {
     return "That email and password combination doesn't match our records.";
@@ -30,7 +35,7 @@ export async function signUpTeacher({
   fullName: string;
   email: string;
   password: string;
-}): Promise<AuthResult> {
+}): Promise<SignUpResult> {
   const supabase = createSupabaseBrowserClient();
 
   const signUpResult = await supabase.auth.signUp({
@@ -43,7 +48,7 @@ export async function signUpTeacher({
 
   if (signUpResult.error) {
     return {
-      success: false,
+      status: "error",
       error: mapAuthError({ message: signUpResult.error.message }),
     };
   }
@@ -54,18 +59,18 @@ export async function signUpTeacher({
 
   if (isExistingAccount) {
     return {
-      success: false,
+      status: "error",
       error:
         "An account with this email already exists - try logging in instead.",
     };
   }
 
-  if (!user || !signUpResult.data.session) {
-    return {
-      success: false,
-      error:
-        "Almost there - please confirm your email from your inbox, then log in.",
-    };
+  if (!user) {
+    return { status: "error", error: "Something went wrong. Please try again." };
+  }
+
+  if (!signUpResult.data.session) {
+    return { status: "confirm_email" };
   }
 
   const insertResult = await supabase.from("teachers").insert({
@@ -77,13 +82,13 @@ export async function signUpTeacher({
 
   if (insertResult.error) {
     return {
-      success: false,
+      status: "error",
       error:
         "Your account was created but the profile draft failed - log in to continue.",
     };
   }
 
-  return { success: true };
+  return { status: "complete" };
 }
 
 export async function logInTeacher({
