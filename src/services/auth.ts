@@ -33,7 +33,13 @@ export async function signUpTeacher({
 }): Promise<AuthResult> {
   const supabase = createSupabaseBrowserClient();
 
-  const signUpResult = await supabase.auth.signUp({ email, password });
+  const signUpResult = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/login`,
+    },
+  });
 
   if (signUpResult.error) {
     return {
