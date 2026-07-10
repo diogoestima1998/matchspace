@@ -6,7 +6,11 @@ import { createPortal } from "react-dom";
 import { BookingForm } from "./BookingForm";
 import type { BookingDrawerProps } from "./types";
 
-export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) {
+export function BookingDrawer({
+  teacher,
+  isOpen,
+  onClose,
+}: BookingDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback(
@@ -15,7 +19,7 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
         onClose();
       }
     },
-    [onClose],
+    [onClose]
   );
 
   useEffect(
@@ -30,7 +34,7 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
         document.body.classList.remove("overflow-hidden");
       };
     },
-    [isOpen, handleKeyDown],
+    [isOpen, handleKeyDown]
   );
 
   if (!isOpen || typeof document === "undefined") {
@@ -38,7 +42,7 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6">
       <button
         type="button"
         aria-label="Close booking form"
@@ -50,7 +54,7 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
         role="dialog"
         aria-modal="true"
         aria-labelledby="booking-drawer-title"
-        className="absolute inset-x-0 bottom-0 max-h-[90dvh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl md:inset-y-0 md:right-0 md:left-auto md:h-full md:max-h-none md:w-[28rem] md:rounded-none md:p-8"
+        className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl sm:max-h-[88dvh] sm:max-w-xl sm:rounded-2xl sm:p-8"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -60,9 +64,7 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
             >
               Request a lesson
             </h2>
-            <p className="mt-1 text-sm text-ink/60">
-              with {teacher.full_name}
-            </p>
+            <p className="mt-1 text-sm text-ink/60">with {teacher.full_name}</p>
           </div>
           <button
             type="button"
@@ -90,6 +92,6 @@ export function BookingDrawer({ teacher, isOpen, onClose }: BookingDrawerProps) 
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }

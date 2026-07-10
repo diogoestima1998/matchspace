@@ -95,7 +95,7 @@ export function BookingForm({ teacher }: BookingFormProps) {
       setErrors({});
       mutation.mutate(parsed.data);
     },
-    [form, mutation, teacher.id],
+    [form, mutation, teacher.id]
   );
 
   const durationOptions = LESSON_DURATIONS.map(function toOption(duration) {
@@ -104,42 +104,45 @@ export function BookingForm({ teacher }: BookingFormProps) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <Input
-        label="Your name"
-        name="student_name"
-        value={form.student_name}
-        onChange={handleFieldChange}
-        error={errors.student_name}
-        required
-      />
-      <Input
-        label="Email"
-        name="student_email"
-        type="email"
-        value={form.student_email}
-        onChange={handleFieldChange}
-        error={errors.student_email}
-        hint="Your teacher will contact you here after booking"
-        required
-      />
-      <DateTimePicker
-        label="Preferred date & time"
-        name="requested_start"
-        value={form.requested_start}
-        onChange={handleFieldChange}
-        error={errors.requested_start}
-        minIso={minStart}
-        required
-      />
-      <Select
-        label="Duration"
-        name="duration_minutes"
-        value={form.duration_minutes}
-        onChange={handleFieldChange}
-        error={errors.duration_minutes}
-        options={durationOptions}
-        required
-      />
+      <div className="grid items-start gap-5 sm:grid-cols-2">
+        <Input
+          label="Your name"
+          name="student_name"
+          value={form.student_name}
+          onChange={handleFieldChange}
+          error={errors.student_name}
+          required
+        />
+        <Input
+          label="Email"
+          name="student_email"
+          type="email"
+          value={form.student_email}
+          onChange={handleFieldChange}
+          error={errors.student_email}
+          required
+        />
+      </div>
+      <div className="grid items-start gap-5 sm:grid-cols-2">
+        <DateTimePicker
+          label="Preferred date & time"
+          name="requested_start"
+          value={form.requested_start}
+          onChange={handleFieldChange}
+          error={errors.requested_start}
+          minIso={minStart}
+          required
+        />
+        <Select
+          label="Duration"
+          name="duration_minutes"
+          value={form.duration_minutes}
+          onChange={handleFieldChange}
+          error={errors.duration_minutes}
+          options={durationOptions}
+          required
+        />
+      </div>
       <Textarea
         label="Message (optional)"
         name="message"
@@ -157,12 +160,17 @@ export function BookingForm({ teacher }: BookingFormProps) {
         </span>
       </div>
       {serverError ? (
-        <p role="alert" className="rounded-lg bg-error/10 px-4 py-3 text-sm text-error">
+        <p
+          role="alert"
+          className="rounded-lg bg-error/10 px-4 py-3 text-sm text-error"
+        >
           {serverError}
         </p>
       ) : null}
       <Button type="submit" disabled={mutation.isPending} className="w-full">
-        {mutation.isPending ? "Preparing secure payment…" : "Continue to payment"}
+        {mutation.isPending
+          ? "Preparing secure payment…"
+          : "Continue to payment"}
       </Button>
       <p className="text-center text-xs text-ink/50">
         Secure payment via Stripe. You&apos;ll be redirected to complete the
