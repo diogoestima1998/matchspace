@@ -34,10 +34,10 @@ export function DateTimePicker({
   const [draftDate, setDraftDate] = useState(valueDate);
   const [draftTime, setDraftTime] = useState(valueTime);
   const [viewYear, setViewYear] = useState(
-    Number((valueDate || minIsoDate).slice(0, 4)),
+    Number((valueDate || minIsoDate).slice(0, 4))
   );
   const [viewMonth, setViewMonth] = useState(
-    Number((valueDate || minIsoDate).slice(5, 7)) - 1,
+    Number((valueDate || minIsoDate).slice(5, 7)) - 1
   );
 
   const errorId = `${name}-error`;
@@ -49,28 +49,27 @@ export function DateTimePicker({
     });
   }, []);
 
-  const handleMonthShift = useCallback(
-    function handleMonthShift(event: MouseEvent<HTMLButtonElement>) {
-      const shift = Number(event.currentTarget.dataset.shift);
-      setViewMonth(function move(previous) {
-        const next = previous + shift;
-        if (next < 0) {
-          setViewYear(function back(year) {
-            return year - 1;
-          });
-          return 11;
-        }
-        if (next > 11) {
-          setViewYear(function forward(year) {
-            return year + 1;
-          });
-          return 0;
-        }
-        return next;
-      });
-    },
-    [],
-  );
+  const handleMonthShift = useCallback(function handleMonthShift(
+    event: MouseEvent<HTMLButtonElement>
+  ) {
+    const shift = Number(event.currentTarget.dataset.shift);
+    setViewMonth(function move(previous) {
+      const next = previous + shift;
+      if (next < 0) {
+        setViewYear(function back(year) {
+          return year - 1;
+        });
+        return 11;
+      }
+      if (next > 11) {
+        setViewYear(function forward(year) {
+          return year + 1;
+        });
+        return 0;
+      }
+      return next;
+    });
+  }, []);
 
   const handleDaySelect = useCallback(
     function handleDaySelect(event: MouseEvent<HTMLButtonElement>) {
@@ -80,7 +79,7 @@ export function DateTimePicker({
         onChange({ name, value: `${iso}T${draftTime}` });
       }
     },
-    [draftTime, name, onChange],
+    [draftTime, name, onChange]
   );
 
   const handleTimeSelect = useCallback(
@@ -92,11 +91,11 @@ export function DateTimePicker({
         setIsOpen(false);
       }
     },
-    [draftDate, name, onChange],
+    [draftDate, name, onChange]
   );
 
   return (
-    <div>
+    <div className="relative">
       <span className="block text-sm font-medium text-ink">
         {label}
         {required ? <span className="text-error"> *</span> : null}
@@ -121,12 +120,25 @@ export function DateTimePicker({
           fill="none"
           className="h-4 w-4 shrink-0 text-ink/50"
         >
-          <rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="1.6" />
-          <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <rect
+            x="3.5"
+            y="5"
+            width="17"
+            height="15"
+            rx="2"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M3.5 9.5h17M8 3v3.5M16 3v3.5"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
         </svg>
       </button>
       {isOpen ? (
-        <div className="mt-2 flex gap-4 rounded-xl border border-line bg-white p-4 shadow-sm">
+        <div className="absolute left-0 top-full z-30 mt-2 flex w-[20rem] gap-4 rounded-xl border border-line bg-white p-4 shadow-xl shadow-ink/10">
           <div className="flex-1">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-ink">
@@ -140,8 +152,19 @@ export function DateTimePicker({
                   onClick={handleMonthShift}
                   className="rounded-full p-1.5 text-ink/60 hover:bg-mist hover:text-ink"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4">
-                    <path d="M12.5 5l-5 5 5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      d="M12.5 5l-5 5 5 5"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
                 <button
@@ -151,15 +174,30 @@ export function DateTimePicker({
                   onClick={handleMonthShift}
                   className="rounded-full p-1.5 text-ink/60 hover:bg-mist hover:text-ink"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4">
-                    <path d="M7.5 5l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      d="M7.5 5l5 5-5 5"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
             </div>
             <div className="mt-2 grid grid-cols-7 gap-0.5 text-center text-xs font-medium text-ink/50">
               {WEEKDAYS.map(function renderWeekday(weekday, index) {
-                return <span key={`${weekday}-${index}`} className="py-1">{weekday}</span>;
+                return (
+                  <span key={`${weekday}-${index}`} className="py-1">
+                    {weekday}
+                  </span>
+                );
               })}
             </div>
             <div className="grid grid-cols-7 gap-0.5">
@@ -175,7 +213,7 @@ export function DateTimePicker({
                     aria-pressed={isSelected}
                     className={classNames({
                       classes: [
-                        "rounded-full py-1.5 text-sm transition-colors",
+                        "flex h-8 w-8 items-center justify-center rounded-full text-sm transition-colors",
                         isSelected
                           ? "bg-rausch font-semibold text-white"
                           : day.disabled
