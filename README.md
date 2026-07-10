@@ -2,7 +2,7 @@
 
 A take-home vertical slice of a music-teacher marketplace: teachers publish profiles with credentials and prices, students browse a public directory and book a lesson with Stripe Checkout — no student account required.
 
-**Live demo:** _(Vercel URL)_
+**Live demo:** https://matchspace-xi.vercel.app
 **Demo teacher login:** `anna.keller@example.com` / `MatchspaceDemo1!` (all 29 seeded teachers share this password)
 **Stripe test card:** `4242 4242 4242 4242`, any future expiry, any CVC
 
